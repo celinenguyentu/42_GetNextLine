@@ -1,0 +1,3 @@
+Hello
+les cocos
+C'est le test de get_next_line, avec des petites lignes et parfois des lignes plus longues.
