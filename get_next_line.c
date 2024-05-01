@@ -6,98 +6,95 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:36 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/04/30 19:44:03 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/01 22:15:45 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
+#include <limits.h>
 
-
-size_t	ft_strlen(const char *s)
+char	*ft_expand(char *str, int size)
 {
-	size_t	len;
+	char	*new_str;
+	int		idx;
 
-	len = 0;
-	while (s[len])
-		len++;
-	return (len);
-}
-
-size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
-{
-	size_t	dst_idx;
-	size_t	src_idx;
-
-	dst_idx = 0;
-	src_idx = 0;
-	if (dst || dstsize != 0)
-	{
-		while (dst[dst_idx] && dst_idx < dstsize)
-			dst_idx++;
-		if (dst_idx < dstsize)
-		{
-			while (src[src_idx] && dst_idx + src_idx < dstsize - 1)
-			{
-				dst[dst_idx + src_idx] = src[src_idx];
-				src_idx++;
-			}
-			dst[dst_idx + src_idx] = '\0';
-		}
-	}
-	while (src[src_idx])
-		src_idx++;
-	return (dst_idx + src_idx);
-}
-
-
-char	*ft_strnchr(const char *s, int c, int n)
-{
-	while (*s && n-- && *s != (unsigned char)c)
-		s++;
-	if (*s == (unsigned char)c)
-		return ((char *)s);
-	return (NULL);
-}
-
-char	*store_line(char *line, char *src, int src_size)
-{
-	char	*eol;
-	
-	eol = ft_strnchr(src, '\n', src_size);
-	if (eol)
-	{
-		ft_strlcat(line, src, ft_strlen(line) + (eol - src + 1) + 1);
-		return (++eol);
-	}
+	if (str)
+		new_str = malloc((ft_strlen(str) + size) * sizeof(char));
 	else
-	{
-		ft_strlcat(line, src, src_size + 1);
+		new_str = malloc(size * sizeof(char));
+	if (!new_str)
 		return (NULL);
+	idx = 0;
+	while (str && str[idx])
+	{
+		new_str[idx] = str[idx];
+		idx++;
 	}
+	new_str[idx] = '\0';
+	free(str);
+	return (new_str);
 }
 
+int	ft_find_eol(const char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] && s[i] != '\n')
+		i++;
+	if (s[i] == '\n')
+		return (i);
+	return (-1);
+}
+
+char	*extract_line(char **cache)
+{
+	char	*line;
+	char	*new_cache;
+	int		n_line;
+	int		idx;
+	
+	if (!*cache || **cache == '\0')
+		return (NULL);
+	if (ft_find_eol(*cache) != -1)
+		n_line = ft_find_eol(*cache) + 1;
+	else
+		n_line = ft_strlen(*cache);
+	line = (char *)malloc((n_line + 1) * sizeof(char));
+	new_cache = (char *)malloc((ft_strlen(*cache) - n_line + 1) * sizeof(char));
+	idx = 0;
+	while ((*cache)[idx] && idx < n_line)
+		line[idx++] = (*cache)[idx];
+	line[idx] = '\0';
+	while ((*cache)[idx])
+		new_cache[idx++ - n_line] = (*cache)[idx];
+	new_cache[idx - n_line] = '\0';
+	free(*cache);
+	*cache = new_cache;
+	return (line);
+}
 
 char	*get_next_line(int fd)
 {
-	char	buffer[BUFFER_SIZE];
-	int		bytes_read;
-	char	*line;
-	static char	next_line[BUFFER_SIZE];
+	char		buffer[BUFFER_SIZE];
+	int			bytes_read;
+	static char	*cache = NULL;
 
-	bytes_read = 1;
-	line = (char *)malloc(sizeof(char));
-	if (!line)
+	if (BUFFER_SIZE <= 0 || BUFFER_SIZE > SSIZE_MAX || fd < 0)
 		return (NULL);
-	line[0] = 0;
-	
-	//while (bytes_read > 0)
-	//{
+	bytes_read = 1;
+	if (cache && ft_find_eol(cache) != -1)
+		return (extract_line(&cache));
+	while (bytes_read > 0 && (!cache || ft_find_eol(cache) == -1))
+	{
 		bytes_read = read(fd, buffer, sizeof(buffer));
 		if (bytes_read == -1)
 			return (NULL);
-		next_line = store_line(line, buffer, bytes_read);
-//	}
-	//printf("next line : %c", *next_line);
-	return (line);
+		if (bytes_read > 0)
+		{
+			cache = ft_expand(cache, bytes_read + 1);
+			ft_strlcat(cache, buffer, ft_strlen(cache) + bytes_read + 1);
+		}
+	}
+	return (extract_line(&cache));
 }
