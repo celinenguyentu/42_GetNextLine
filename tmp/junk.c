@@ -6,13 +6,13 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:44:15 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/02 04:44:05 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/03 15:07:45 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-/* Using strlcat to merge cache and new content from read buffer (with no \0) */
+/* Using strlcat to merge cache and new content from read buffer when bytes_read > 0 */
 
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
@@ -94,13 +94,14 @@ char	*get_next_line(int fd)
 	return (extract_line(&cache));
 }
 
-/*
+/* Using strlcpy to copy cache into line and new_cache */
+/* + free and clear cache when it's empty before return */
+
 char	*extract_line(char **cache)
 {
 	char	*line;
 	char	*new_cache;
 	int		l_len;
-	int		idx;
 
 	if (!*cache || **cache == '\0')
 		return (NULL);
@@ -114,16 +115,36 @@ char	*extract_line(char **cache)
 	new_cache = (char *)malloc((ft_strlen(*cache) - l_len + 1) * sizeof(char));
 	if (!new_cache)
 		return (ft_free_null(line));
-	idx = 0;
-	while ((*cache)[idx] && idx < l_len)
-		line[idx++] = (*cache)[idx];
-	line[idx] = '\0';
-	while ((*cache)[idx])
-		new_cache[idx++ - l_len] = (*cache)[idx];
-	new_cache[idx - l_len] = '\0';
-	
+	ft_strlcpy(line, *cache, l_len + 1);
+	ft_strlcpy(new_cache, &(*cache)[l_len], ft_strlen(*cache) - l_len + 1);
 	free(*cache);
 	*cache = new_cache;
+	/*
+	if (ft_strlen(new_cache) > 0)
+		*cache = new_cache;
+	else
+	{
+		free(new_cache);
+		*cache = NULL;
+	}*/
 	return (line);
 }
-*/
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	size_t	idx;
+
+	idx = 0;
+	if (dstsize != 0)
+	{
+		while (src[idx] && idx < dstsize - 1)
+		{
+			dst[idx] = src[idx];
+			idx++;
+		}
+		dst[idx] = '\0';
+	}
+	while (src[idx])
+		idx++;
+	return (idx);
+}

@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:50 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/03 01:12:31 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/03 15:10:11 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,9 @@ char	*get_next_line(int fd);
 
 // utils
 size_t	ft_strlen(const char *s);
-char	*ft_strjoin(char *s1, char const *s2);
 char	*ft_strchr(const char *s, int c);
-void	*ft_free_null(void *ptr);
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
+void	*ft_free(void *ptr);
+char	*ft_strjoin_and_free(char *s1, char const *s2);
 
 #endif
