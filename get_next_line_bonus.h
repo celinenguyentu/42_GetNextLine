@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:50 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/03 01:12:31 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/02 23:35:00 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -22,6 +22,13 @@
 # endif
 # define B_MAX SSIZE_MAX
 
+typedef struct s_lstcache
+{
+	int			fd;
+	char		*cache;
+	s_lstcache	*next;
+} t_lstcache;
+
 char	*get_next_line(int fd);
 
 // utils
@@ -30,6 +37,5 @@ char	*ft_strjoin(char *s1, char const *s2);
 char	*ft_strchr(const char *s, int c);
 void	*ft_free_null(void *ptr);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
 
 #endif

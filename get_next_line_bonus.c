@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:36 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/03 01:15:38 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/02 23:36:56 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 #include <stdio.h>
 #include <fcntl.h>
 
@@ -26,20 +26,16 @@ char	*extract_line(char **cache)
 		l_len = ft_strchr(*cache, '\n') - *cache + 1;
 	else
 		l_len = ft_strlen(*cache);
-	line = ft_substr(*cache, 0, l_len);
+	line = (char *)malloc((l_len + 1) * sizeof(char));
 	if (!line)
 		return (NULL);
-	new_cache = ft_substr(*cache, l_len, ft_strlen(*cache) - l_len);
+	new_cache = (char *)malloc((ft_strlen(*cache) - l_len + 1) * sizeof(char));
 	if (!new_cache)
 		return (ft_free_null(line));
+	ft_strlcpy(line, *cache, l_len + 1);
+	ft_strlcpy(new_cache, &(*cache)[l_len], ft_strlen(*cache) - l_len + 1);
 	free(*cache);
-	if (ft_strlen(new_cache) > 0)
-		*cache = new_cache;
-	else
-	{
-		free(new_cache);
-		*cache = NULL;
-	}
+	*cache = new_cache;
 	return (line);
 }
 
@@ -70,30 +66,3 @@ char	*get_next_line(int fd)
 	free(buffer);
 	return (extract_line(&cache));
 }
-
-/* SAVE
-char	*extract_line(char **cache)
-{
-	char	*line;
-	char	*new_cache;
-	int		l_len;
-
-	if (!*cache || **cache == '\0')
-		return (NULL);
-	if (ft_strchr(*cache, '\n'))
-		l_len = ft_strchr(*cache, '\n') - *cache + 1;
-	else
-		l_len = ft_strlen(*cache);
-	line = (char *)malloc((l_len + 1) * sizeof(char));
-	if (!line)
-		return (NULL);
-	new_cache = (char *)malloc((ft_strlen(*cache) - l_len + 1) * sizeof(char));
-	if (!new_cache)
-		return (ft_free_null(line));
-	ft_strlcpy(line, *cache, l_len + 1);
-	ft_strlcpy(new_cache, &(*cache)[l_len], ft_strlen(*cache) - l_len + 1);
-	free(*cache);
-	*cache = new_cache;
-	return (line);
-}
-*/

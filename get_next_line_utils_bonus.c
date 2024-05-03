@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:02 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/03 01:07:44 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/02 23:36:13 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 size_t	ft_strlen(const char *s)
 {
@@ -80,28 +80,4 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	while (src[idx])
 		idx++;
 	return (idx);
-}
-
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char	*substr;
-	size_t	idx;
-	size_t	size;
-
-	idx = 0;
-	size = 0;
-	while (s[idx] && idx < start)
-		idx++;
-	while (s[idx + size] && size < len)
-		size++;
-	substr = (char *)malloc((size + 1) * sizeof(char));
-	if (!substr)
-		return (NULL);
-	substr[size] = '\0';
-	while (size > 0)
-	{
-		substr[size - 1] = s[idx + size - 1];
-		size--;
-	}
-	return (substr);
 }
