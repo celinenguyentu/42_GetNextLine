@@ -6,13 +6,11 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:36 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/03 15:09:06 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/03 15:17:46 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
-#include <fcntl.h>
 
 static char	*extract_line(char **cache)
 {
