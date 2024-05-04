@@ -6,12 +6,13 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:44:15 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/03 15:07:45 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/04 19:42:39 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+/* MANDATORY PART */
 /* Using strlcat to merge cache and new content from read buffer when bytes_read > 0 */
 
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
@@ -147,4 +148,16 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	while (src[idx])
 		idx++;
 	return (idx);
+}
+
+/* BONUS PART	*/
+#include "../get_next_line_bonus.h"
+
+void	print_caches(t_cachelist *caches)
+{
+	if (caches)
+	{
+		printf("fd = %d : \"%s\"\n", caches->fd, caches->cache);
+		print_caches(caches->next);
+	}
 }
