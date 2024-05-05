@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:44:15 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/04 19:42:39 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/05 17:06:22 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,4 +160,101 @@ void	print_caches(t_cachelist *caches)
 		printf("fd = %d : \"%s\"\n", caches->fd, caches->cache);
 		print_caches(caches->next);
 	}
+}
+
+void	*free_caches(t_cachelist **caches)
+{
+	if (*caches)
+	{
+		if ((*caches)->next)
+			free_caches(&(*caches)->next);
+		free((*caches)->cache);
+		free(*caches);
+	}
+	*caches = NULL;
+	return (NULL);
+}
+
+void	*remove_cache(t_cachelist **caches, int fd)
+{
+	t_cachelist	*prev;
+	t_cachelist	*current;
+
+	prev = *caches;
+	current = *caches;
+	if (fd == -1)
+	{
+		while (prev)
+		{
+			current = prev->next;
+			free(prev->cache);
+			free(prev);
+			prev = current;
+		}
+		*caches = NULL;
+	}
+	else
+	{
+		while (current && current->fd != fd)
+		{
+			prev = current;
+			current = current->next;
+		}
+		if (current == *caches)
+			*caches = current->next;
+		else
+			prev->next = current->next;
+		free(current->cache);
+		free(current);
+	}
+	return (NULL);
+}
+
+t_cachelist	*add_to_caches(t_cachelist **caches, int fd, char const *src)
+{
+	t_cachelist	*current;
+	t_cachelist	*cachefd;
+
+	current = *caches;
+	while (current && current->fd != fd && current->next)
+		current = current->next;
+	if (current && current->fd == fd)
+	{
+		current->cache = ft_strjoin_and_free(current->cache, src);
+		if (!current->cache)
+			return (remove_cache(caches, -1));
+	}
+	else
+	{
+		cachefd = (t_cachelist *)malloc(sizeof(t_cachelist));
+		if (!cachefd)
+			return (remove_cache(caches, -1));
+		cachefd->fd = fd;
+		cachefd->cache = ft_substr(src, 0, ft_strlen(src));
+		cachefd->next = NULL;
+		if (!cachefd->cache)
+			return (remove_cache(caches, -1));
+		if (current)
+			current->next = cachefd;
+		else
+			*caches = cachefd;
+	}
+	return (*caches);
+}
+
+t_cachelist	*new_cache(int fd, const char *str)
+{
+	t_cachelist		*new;
+	char			*cache;
+
+	new = (t_cachelist *)malloc(sizeof(t_cachelist));
+	if (!new)
+		return (NULL);
+	cache = ft_substr(str, 0, ft_strlen(str));
+	if (!cache)
+		return (ft_free(new));
+	new->fd = fd;
+	new->cache = cache;
+	new->next = NULL;
+	return (new);
 }

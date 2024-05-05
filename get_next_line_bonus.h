@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:50 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/04 18:16:05 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/05 17:11:46 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,9 @@ typedef struct s_cachelist
 	int					fd;
 	char				*cache;
 	struct s_cachelist	*next;
-} t_cachelist;
+}	t_cachelist;
 
-char		*get_next_line(int fd);
-void	add_to_caches(t_cachelist **caches, int fd, char const *src);
-char		*get_cache(t_cachelist *caches, int fd);
-void	print_caches(t_cachelist *caches);
+char	*get_next_line(int fd);
 
 // utils
 size_t	ft_strlen(const char *s);
