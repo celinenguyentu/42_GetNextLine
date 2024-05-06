@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:02 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/05 17:11:12 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/05 19:43:26 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,7 @@ char	*ft_strjoin_and_free(char *s1, char const *s2)
 	size_t	idx;
 	size_t	total_length;
 
-	total_length = ft_strlen(s2);
-	if (s1)
-		total_length += ft_strlen(s1);
+	total_length = ft_strlen(s1) + ft_strlen(s2);
 	str = (char *)malloc((total_length + 1) * sizeof(char));
 	if (!str)
 		return (ft_free(s1));
@@ -82,7 +80,6 @@ char	*ft_strjoin_and_free(char *s1, char const *s2)
 	while (s2 && *s2)
 		str[idx++] = *s2++;
 	str[idx] = '\0';
-	if (s1)
-		free(s1);
+	free(s1);
 	return (str);
 }

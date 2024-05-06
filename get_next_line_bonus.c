@@ -6,87 +6,87 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:36 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/05 17:07:14 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/06 02:31:20 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-void	*remove_cache(t_cachelist **caches, int fd)
+static void	*clear_cache(t_cache **cache, int fd)
 {
-	t_cachelist	*current;
+	t_cache	*current;
 
-	while (*caches && ((*caches)->fd == fd || fd == -1))
+	while (*cache && ((*cache)->fd == fd || fd == -1))
 	{
-		current = *caches;
-		*caches = (*caches)->next;
-		free(current->cache);
+		current = *cache;
+		*cache = (*cache)->next;
+		free(current->data);
 		free(current);
 	}
-	if (*caches)
-		remove_cache(&((*caches)->next), fd);
+	if (*cache)
+		clear_cache(&((*cache)->next), fd);
 	return (NULL);
 }
 
-t_cachelist	*add_to_caches(t_cachelist **caches, int fd, char const *src)
+static t_cache	*add_to_cache(t_cache **cache, int fd, char const *src)
 {
-	t_cachelist	*current;
-	t_cachelist	*cachefd;
+	t_cache	*current;
+	t_cache	*new_cache;
 
-	current = *caches;
+	current = *cache;
 	while (current && current->fd != fd)
 		current = current->next;
 	if (current)
 	{
-		current->cache = ft_strjoin_and_free(current->cache, src);
-		if (!current->cache)
-			return (remove_cache(caches, -1));
-		return (*caches);
+		current->data = ft_strjoin_and_free(current->data, src);
+		if (!current->data)
+			return (clear_cache(cache, -1));
+		return (*cache);
 	}
-	cachefd = (t_cachelist *)malloc(sizeof(t_cachelist));
-	if (!cachefd)
-		return (remove_cache(caches, -1));
-	cachefd->fd = fd;
-	cachefd->cache = ft_substr(src, 0, ft_strlen(src));
-	if (!cachefd->cache)
-		return (remove_cache(caches, -1));
-	cachefd->next = *caches;
-	*caches = cachefd;
-	return (*caches);
+	new_cache = (t_cache *)malloc(sizeof(t_cache));
+	if (!new_cache)
+		return (clear_cache(cache, -1));
+	new_cache->fd = fd;
+	new_cache->data = ft_substr(src, 0, ft_strlen(src));
+	if (!new_cache->data)
+		return (clear_cache(cache, -1));
+	new_cache->next = *cache;
+	*cache = new_cache;
+	return (*cache);
 }
 
-t_cachelist	*get_caches(t_cachelist *caches, int fd)
+static char	**get_data(t_cache *cache, int fd)
 {
-	while (caches && caches->fd != fd)
-		caches = caches->next;
-	if (caches)
-		return (caches);
+	while (cache && cache->fd != fd)
+		cache = cache->next;
+	if (cache)
+		return (&cache->data);
 	else
 		return (NULL);
 }
 
-static char	*extract_line(t_cachelist **caches, int fd)
+static char	*extract_line(t_cache **cache, int fd)
 {
 	char		*line;
-	char		*new_cache;
-	int			l_len;
-	t_cachelist	*elem;
+	char		*new_data;
+	int			line_len;
+	char		**data;
 
-	elem = get_caches(*caches, fd);
-	if (ft_strlen(elem->cache) == 0)
-		return (remove_cache(caches, fd));
-	if (ft_strchr(elem->cache, '\n'))
-		l_len = ft_strchr(elem->cache, '\n') - elem->cache + 1;
+	data = get_data(*cache, fd);
+	if (ft_strlen(*data) == 0)
+		return (clear_cache(cache, fd));
+	if (ft_strchr(*data, '\n'))
+		line_len = ft_strchr(*data, '\n') - *data + 1;
 	else
-		l_len = ft_strlen(elem->cache);
-	line = ft_substr(elem->cache, 0, l_len);
+		line_len = ft_strlen(*data);
+	line = ft_substr(*data, 0, line_len);
 	if (!line)
 		return (NULL);
-	new_cache = ft_substr(elem->cache, l_len, ft_strlen(elem->cache) - l_len);
-	if (!new_cache)
+	new_data = ft_substr(*data + line_len, 0, ft_strlen(*data) - line_len);
+	if (!new_data)
 		return (ft_free(line));
-	free(elem->cache);
-	elem->cache = new_cache;
+	free(*data);
+	*data = new_data;
 	return (line);
 }
 
@@ -94,27 +94,26 @@ char	*get_next_line(int fd)
 {
 	char				*buffer;
 	int					bytes_read;
-	static t_cachelist	*cachelist = NULL;
-	t_cachelist			*cachefd;
+	static t_cache		*cache = NULL;
 
 	if (BUFFER_SIZE < 1 || BUFFER_SIZE > B_MAX || fd < 0 || read(fd, 0, 0) < 0)
 		return (NULL);
-	cachefd = get_caches(cachelist, fd);
-	if (cachelist && cachefd && ft_strchr(cachefd->cache, '\n'))
-		return (extract_line(&cachelist, fd));
+	if (cache && get_data(cache, fd) && ft_strchr(*get_data(cache, fd), '\n'))
+		return (extract_line(&cache, fd));
 	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
 		return (NULL);
 	bytes_read = 1;
-	while (bytes_read > 0 && (!cachefd || !ft_strchr(cachefd->cache, '\n')))
+	while (bytes_read > 0 && (!get_data(cache, fd)
+			|| !ft_strchr(*get_data(cache, fd), '\n')))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
 			return (ft_free(buffer));
 		buffer[bytes_read] = '\0';
-		if (!add_to_caches(&cachelist, fd, buffer))
+		if (!add_to_cache(&cache, fd, buffer))
 			return (ft_free(buffer));
 	}
 	free(buffer);
-	return (extract_line(&cachelist, fd));
+	return (extract_line(&cache, fd));
 }

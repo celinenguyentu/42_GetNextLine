@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:50 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/05 17:11:46 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/05 22:54:11 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,12 @@
 # endif
 # define B_MAX SSIZE_MAX
 
-typedef struct s_cachelist
+typedef struct s_cache
 {
-	int					fd;
-	char				*cache;
-	struct s_cachelist	*next;
-}	t_cachelist;
+	int				fd;
+	char			*data;
+	struct s_cache	*next;
+}	t_cache;
 
 char	*get_next_line(int fd);
 

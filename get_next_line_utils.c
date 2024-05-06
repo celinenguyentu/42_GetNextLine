@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:02 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/03 15:08:28 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/06 00:34:30 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 
 void	*ft_free(void *ptr)
 {
-	if (ptr)
-		free(ptr);
+	free(ptr);
 	return (NULL);
 }
 

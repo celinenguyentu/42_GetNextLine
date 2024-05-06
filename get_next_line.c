@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:36 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/03 15:17:46 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/06 00:42:52 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static char	*extract_line(char **cache)
 {
 	char	*line;
 	char	*new_cache;
-	int		l_len;
+	int		line_len;
 
 	if (**cache == '\0')
 	{
@@ -25,13 +25,13 @@ static char	*extract_line(char **cache)
 		return (NULL);
 	}
 	if (ft_strchr(*cache, '\n'))
-		l_len = ft_strchr(*cache, '\n') - *cache + 1;
+		line_len = ft_strchr(*cache, '\n') - *cache + 1;
 	else
-		l_len = ft_strlen(*cache);
-	line = ft_substr(*cache, 0, l_len);
+		line_len = ft_strlen(*cache);
+	line = ft_substr(*cache, 0, line_len);
 	if (!line)
 		return (NULL);
-	new_cache = ft_substr(*cache, l_len, ft_strlen(*cache) - l_len);
+	new_cache = ft_substr(*cache + line_len, 0, ft_strlen(*cache) - line_len);
 	if (!new_cache)
 		return (ft_free(line));
 	free(*cache);
