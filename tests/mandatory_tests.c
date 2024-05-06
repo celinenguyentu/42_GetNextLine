@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:33:11 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/02 20:31:55 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/06 20:34:53 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	run_gnl(int fd, int n_lines)
 	}
 	printf("\n--------------------------------------------------\n");
 	printf("Printed %d lines out of %d.\n", l_print, l_total);
-	printf("BUFFER_SIZE = %lu / %lu\n", (unsigned long)BUFFER_SIZE, SSIZE_MAX);
+	printf("BUFFER_SIZE = %lu / %lu\n", (unsigned long)BUFFER_SIZE, LONG_MAX);
 }
 
 int	main(int argc, char **argv)
@@ -85,6 +85,8 @@ int	main(int argc, char **argv)
 		if (argc > 2 && ft_isuint(argv[2]) != -1)
 			n_lines = ft_isuint(argv[2]);
 		else if (argc > 2)
+			return (ft_puterror("Too many inputs.\n"));
+		if (argc > 3)
 			return (ft_puterror("Too many inputs.\n"));
 	}
 	run_gnl(fd, n_lines);

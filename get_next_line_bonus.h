@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:50 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/05 22:54:11 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/06 13:32:07 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
-# define B_MAX SSIZE_MAX
+# define B_MAX LONG_MAX
 
 typedef struct s_cache
 {

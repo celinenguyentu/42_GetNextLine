@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:36 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/06 02:31:20 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/06 17:38:02 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,23 +70,23 @@ static char	*extract_line(t_cache **cache, int fd)
 	char		*line;
 	char		*new_data;
 	int			line_len;
-	char		**data;
+	char		**p_data;
 
-	data = get_data(*cache, fd);
-	if (ft_strlen(*data) == 0)
+	p_data = get_data(*cache, fd);
+	if (ft_strlen(*p_data) == 0)
 		return (clear_cache(cache, fd));
-	if (ft_strchr(*data, '\n'))
-		line_len = ft_strchr(*data, '\n') - *data + 1;
+	if (ft_strchr(*p_data, '\n'))
+		line_len = ft_strchr(*p_data, '\n') - *p_data + 1;
 	else
-		line_len = ft_strlen(*data);
-	line = ft_substr(*data, 0, line_len);
+		line_len = ft_strlen(*p_data);
+	line = ft_substr(*p_data, 0, line_len);
 	if (!line)
 		return (NULL);
-	new_data = ft_substr(*data + line_len, 0, ft_strlen(*data) - line_len);
+	new_data = ft_substr(*p_data + line_len, 0, ft_strlen(*p_data) - line_len);
 	if (!new_data)
 		return (ft_free(line));
-	free(*data);
-	*data = new_data;
+	free(*p_data);
+	*p_data = new_data;
 	return (line);
 }
 
