@@ -6,36 +6,115 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 20:44:01 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/02 21:01:11 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/06 22:30:59 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../get_next_line.h"
+#include "../get_next_line_bonus.h"
 #include <stdio.h>
 #include <fcntl.h>
 
-int	main(void)
+int	ft_puterror(const char *str)
 {
-	int		fd;
-	char	*line;
+	printf("Cannot read file \"%s\".\n", str);
+	return (1);
+}
 
-	fd = open("tests/file", O_RDONLY);
-	line = "";
-	while (line != NULL)
+size_t	ft_stringlength(const char *s)
+{
+	size_t	len;
+
+	len = 0;
+	while (s[len])
+		len++;
+	return (len);
+}
+
+int	end_of_all_files(int *end_of_file, int nb_files)
+{
+	int	end;
+	int	idx;
+	
+	end = 1;
+	idx = 0;
+	while (idx < nb_files)
 	{
-		line = get_next_line(fd);
-		printf("%s", line);
-		free(line);
+		if (end_of_file[idx] == 0)
+		{
+			end = 0;
+			break ;
+		}
+		idx++;
 	}
-	close(fd);
-	fd = open("tests/feelinggood.txt", O_RDONLY);
+	return (end);
+}
+
+int	main(int argc, char **argv)
+{
+	int		filedescriptors[argc - 1]; 
+	int		end_of_file[argc - 1];
+	char	*line;
+	int		idx;
+	int		line_no;
+
 	line = "";
-	while (line != NULL)
+	if (argc == 1)
 	{
-		line = get_next_line(fd);
-		printf("%s", line);
-		free(line);
+		while (line != NULL)
+		{
+			line = get_next_line(0);
+			printf("%s", line);
+			free(line);
+		}
+		return (0);
 	}
-	close(fd);
+	idx = 0;
+	while (idx < argc - 1)
+	{
+		filedescriptors[idx] = open(argv[idx + 1], O_RDONLY);
+		if (filedescriptors[idx] == -1)
+			return (ft_puterror(argv[idx + 1]));
+		end_of_file[idx] = 0;
+		idx++;
+	}
+	line_no = 1;
+	while (!end_of_all_files(end_of_file, argc - 1))
+	{
+		idx = 0;
+		while (idx < argc - 1)
+		{
+			line = get_next_line(filedescriptors[idx]);
+			printf("%d | %s", line_no, line);
+			if (!line)
+			{
+				printf("\n");
+				end_of_file[idx] = 1;
+			}
+			else if (line[ft_stringlength(line) - 1] != '\n')
+				printf("$\n");
+			free(line);
+			idx++;
+		}
+		line_no++;
+	}
+	idx = 0;
+	while (idx < argc - 1)
+	{
+		close(filedescriptors[idx]);
+		idx++;
+	}
+	printf("\n--------------------------------------------------\n");
+	printf("Printed %d alternated files : ", argc - 1);
+	idx = 0;
+	while (idx < argc - 1)
+	{
+		printf("%s", argv[idx + 1]);
+		if (idx == argc - 2)
+			printf(".\n");
+		else
+			printf(", ");
+		idx++;
+	}
+	printf("BUFFER_SIZE = %lu / %lu\n", (unsigned long)BUFFER_SIZE, LONG_MAX);
 	return (0);
 }

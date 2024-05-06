@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:33:11 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/06 20:34:53 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/06 21:31:07 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,12 @@ void	run_gnl(int fd, int n_lines)
 		line = get_next_line(fd);
 		if (n_lines == -1 || n_lines > 0)
 		{
-			printf("%s", line);
 			if (line)
+			{
 				l_print++;
+				printf("%d | ", l_print);
+			}
+			printf("%s", line);
 			if (n_lines != -1)
 				n_lines--;
 		}
