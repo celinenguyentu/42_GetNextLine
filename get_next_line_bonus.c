@@ -6,23 +6,20 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:36 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/08 05:38:46 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/08 15:40:22 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
 /*
-	CLEAR_CACHE
-	Deletes a node from cache or complete cache. The node corresponding to data
-	backup read from the file descriptor fd is removed from the cache list if
-	fd is a valid file descriptor. If fd is -1, the function deletes all nodes
-	and sets the pointer pointing to the beginning of the list to NULL.
+	EXIT_ERROR
+	Deletes the node corresponding to the file descriptor in the list of caches
+	and frees an additional pointer.
 	PARAMETER(S)
-	1/	A pointer to the first node of the list representing the cache
-	2/	The file descriptor corresponding to the node to delete. If the
-	parameter is set to -1, the function deletes all the nodes, thus the full
-	cache.
+	1/	Pointer to cache
+	2/	File descriptor of the node to remove
+	2/	Other pointer to free
 	RETURN
 	Always returns NULL.
 */
@@ -31,18 +28,32 @@ static void	*exit_error(t_cache **cache, int fd, void *ptr)
 {
 	t_cache	*current;
 
-	while (*cache && ((*cache)->fd == fd || fd == -1))
+	if (*cache && (*cache)->fd == fd)
 	{
 		current = *cache;
 		*cache = (*cache)->next;
 		free(current->data);
 		free(current);
 	}
-	if (*cache)
+	else if (*cache)
 		exit_error(&((*cache)->next), fd, NULL);
 	free(ptr);
 	return (NULL);
 }
+
+/*
+	ADD_TO_CACHE
+	Inserts new data copied from src to the cache corresponding to the
+	specified file descriptor by appending the existing data. If no cache
+	already exist, the function creates a new node to the cache list.
+	PARAMETER(S)
+	1/	Pointer to cache
+	2/	File descriptor associated with the data to add
+	2/	Data string to add
+	RETURN
+	The function returns a pointer to the first node of the cache list if
+	insertion was successful. If an error occurred, it returns NULL.
+*/
 
 static t_cache	*add_to_cache(t_cache **cache, int fd, char const *src)
 {
@@ -71,6 +82,18 @@ static t_cache	*add_to_cache(t_cache **cache, int fd, char const *src)
 	return (*cache);
 }
 
+/*
+	GET_DATA
+	Retrieves the address of the data stored in the cache corresponding to the
+	file descriptor.
+	PARAMETER(S)
+	1/	Pointer to the first node of the cache
+	2/	File descriptor corresponding to the search
+	RETURN
+	A pointer to the data stored in the cache for the specified file descriptor
+	is returned. If no matching file descriptor is found, it returns NULL.
+*/
+
 static char	**get_data(t_cache *cache, int fd)
 {
 	while (cache && cache->fd != fd)
@@ -80,6 +103,22 @@ static char	**get_data(t_cache *cache, int fd)
 	else
 		return (NULL);
 }
+
+/*
+	EXTRACT_LINE
+	Extracts the first line from the cache corresponding to fd, including the
+	terminating newline character '\n' if found. If no newline is found, the
+	full cache corresponding to the file descriptor is considered as a line. If
+	the cache is empty, the function removes its node from the list of caches
+	before returning NULL. After extraction, the cache is updated to contain
+	only the remaining characters.
+	PARAMETER(S)
+	1/	Pointer to cache
+	2/	File descriptor to read from
+	RETURN
+	The function returns the first line of the cache corresponding to the file
+	descriptor. If the cache is empty or if an error occurred, it returns NULL.
+*/
 
 static char	*extract_line(t_cache **cache, int fd)
 {
@@ -105,6 +144,21 @@ static char	*extract_line(t_cache **cache, int fd)
 	*p_data = new_data;
 	return (line);
 }
+
+/*
+	GET_NEXT_LINE
+	Reads from the file descriptor to get the next first line. The function
+	reads BUFFER_SIZE characters at a time and stores them in a cache until a
+	newline character is read or the end of the file is reached. If a newline
+	is already present in the initial cache, no additional characters are read.
+	The first line is extracted from the cache.
+	PARAMETER(S)
+		File descriptor to read from
+	RETURN
+	The function returns the next line read from the file descriptor as a
+	string. If there is nothing left to be read or if an error occurred, it
+	returns NULL.
+*/
 
 char	*get_next_line(int fd)
 {

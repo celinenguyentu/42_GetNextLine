@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:36 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/08 03:11:49 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/08 15:03:46 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	*exit_error(char **cache, void *ptr)
 	character '\n' if found. If no newline is found, the full cache is
 	considered as a line. If the cache is empty, the function reinitializes it
 	to NULL before returning NULL. After extraction, the cache is updated to
-	the remaining characters.
+	contain only the remaining characters.
 	PARAMETER(S)
 		Pointer to cache
 	RETURN
@@ -71,14 +71,15 @@ static char	*extract_line(char **cache)
 	GET_NEXT_LINE
 	Reads from the file descriptor to get the next first line. The function
 	reads BUFFER_SIZE characters at a time and stores them in a cache until a
-	newline character is read. If a newline is already present in the initial
-	cache, no additional characters are read. The characters following the
-	first newline are stored in the cache for future calls of the function.
+	newline character is read or the end of the file is reached. If a newline
+	is already present in the initial cache, no additional characters are read.
+	The first line is extracted from the cache.
 	PARAMETER(S)
 		File descriptor to read from
 	RETURN
-	The function returns the first line read from the file descriptor. If there
-	is nothing to be read or if an error occurred, it returns NULL.
+	The function returns the next line read from the file descriptor as a
+	string. If there is nothing left to be read or if an error occurred, it
+	returns NULL.
 */
 
 char	*get_next_line(int fd)
