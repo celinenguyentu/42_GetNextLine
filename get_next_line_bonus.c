@@ -6,13 +6,28 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:36 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/06 17:38:02 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/08 05:38:46 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-static void	*clear_cache(t_cache **cache, int fd)
+/*
+	CLEAR_CACHE
+	Deletes a node from cache or complete cache. The node corresponding to data
+	backup read from the file descriptor fd is removed from the cache list if
+	fd is a valid file descriptor. If fd is -1, the function deletes all nodes
+	and sets the pointer pointing to the beginning of the list to NULL.
+	PARAMETER(S)
+	1/	A pointer to the first node of the list representing the cache
+	2/	The file descriptor corresponding to the node to delete. If the
+	parameter is set to -1, the function deletes all the nodes, thus the full
+	cache.
+	RETURN
+	Always returns NULL.
+*/
+
+static void	*exit_error(t_cache **cache, int fd, void *ptr)
 {
 	t_cache	*current;
 
@@ -24,7 +39,8 @@ static void	*clear_cache(t_cache **cache, int fd)
 		free(current);
 	}
 	if (*cache)
-		clear_cache(&((*cache)->next), fd);
+		exit_error(&((*cache)->next), fd, NULL);
+	free(ptr);
 	return (NULL);
 }
 
@@ -40,16 +56,16 @@ static t_cache	*add_to_cache(t_cache **cache, int fd, char const *src)
 	{
 		current->data = ft_strjoin_and_free(current->data, src);
 		if (!current->data)
-			return (clear_cache(cache, -1));
+			return (exit_error(cache, fd, NULL));
 		return (*cache);
 	}
 	new_cache = (t_cache *)malloc(sizeof(t_cache));
 	if (!new_cache)
-		return (clear_cache(cache, -1));
+		return (exit_error(cache, fd, NULL));
 	new_cache->fd = fd;
 	new_cache->data = ft_substr(src, 0, ft_strlen(src));
 	if (!new_cache->data)
-		return (clear_cache(cache, -1));
+		return (exit_error(cache, fd, new_cache));
 	new_cache->next = *cache;
 	*cache = new_cache;
 	return (*cache);
@@ -74,17 +90,17 @@ static char	*extract_line(t_cache **cache, int fd)
 
 	p_data = get_data(*cache, fd);
 	if (ft_strlen(*p_data) == 0)
-		return (clear_cache(cache, fd));
+		return (exit_error(cache, fd, NULL));
 	if (ft_strchr(*p_data, '\n'))
 		line_len = ft_strchr(*p_data, '\n') - *p_data + 1;
 	else
 		line_len = ft_strlen(*p_data);
 	line = ft_substr(*p_data, 0, line_len);
 	if (!line)
-		return (NULL);
+		return (exit_error(cache, fd, NULL));
 	new_data = ft_substr(*p_data + line_len, 0, ft_strlen(*p_data) - line_len);
 	if (!new_data)
-		return (ft_free(line));
+		return (exit_error(cache, fd, line));
 	free(*p_data);
 	*p_data = new_data;
 	return (line);
@@ -97,22 +113,22 @@ char	*get_next_line(int fd)
 	static t_cache		*cache = NULL;
 
 	if (BUFFER_SIZE < 1 || BUFFER_SIZE > B_MAX || fd < 0 || read(fd, 0, 0) < 0)
-		return (NULL);
+		return (exit_error(&cache, fd, NULL));
 	if (cache && get_data(cache, fd) && ft_strchr(*get_data(cache, fd), '\n'))
 		return (extract_line(&cache, fd));
 	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!buffer)
-		return (NULL);
+		return (exit_error(&cache, fd, NULL));
 	bytes_read = 1;
 	while (bytes_read > 0 && (!get_data(cache, fd)
 			|| !ft_strchr(*get_data(cache, fd), '\n')))
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
-			return (ft_free(buffer));
+			return (exit_error(&cache, fd, buffer));
 		buffer[bytes_read] = '\0';
 		if (!add_to_cache(&cache, fd, buffer))
-			return (ft_free(buffer));
+			return (exit_error(&cache, fd, buffer));
 	}
 	free(buffer);
 	return (extract_line(&cache, fd));
