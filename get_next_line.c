@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:36 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/08 15:03:46 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:57:11 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,13 +92,13 @@ char	*get_next_line(int fd)
 		return (exit_error(&cache, NULL));
 	if (cache && ft_strchr(cache, '\n'))
 		return (extract_line(&cache));
-	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	buffer = (char *)malloc((BUFFER_SIZE) * sizeof(char));
 	if (!buffer)
 		return (exit_error(&cache, NULL));
 	bytes_read = 1;
 	while (bytes_read > 0 && (!cache || !ft_strchr(cache, '\n')))
 	{
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		bytes_read = read(fd, buffer, BUFFER_SIZE - 1);
 		if (bytes_read == -1)
 			return (exit_error(&cache, buffer));
 		buffer[bytes_read] = '\0';
