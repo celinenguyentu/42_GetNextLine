@@ -19,13 +19,13 @@ BOFILES		=	${BSRCS:.c=.o}
 all:		${NAME}
 
 ${NAME}:	${MOFILES}
-			${CC} ${CFLAGS} ${OPTION} ${MOFILES} -o ${NAME}
+			@${CC} ${CFLAGS} ${OPTION} ${MOFILES} -o ${NAME} -g
 
 bonus:		${BOFILES}
-			${CC} ${CFLAGS} ${OPTION} ${BOFILES} -o ${NAME}
+			@${CC} ${CFLAGS} ${OPTION} ${BOFILES} -o ${NAME} -g
 
 .c.o: 
-	${CC} ${CFLAGS} ${OPTION} -c $< -o $@
+	@${CC} ${CFLAGS} ${OPTION} -c $< -o $@
 
 clean:
 	rm -rf ${MOFILES} ${BOFILES} 
