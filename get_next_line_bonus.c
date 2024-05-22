@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:36 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/22 13:23:38 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/22 15:30:50 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 	PARAMETER(S)
 	1/	Pointer to cache
 	2/	File descriptor of the node to remove
-	2/	Other pointer to free
+	3/	Other pointer to free
 	RETURN
 	Always returns NULL.
 */
@@ -42,20 +42,21 @@ static void	*exit_error(t_cache **cache, int fd, void *ptr)
 }
 
 /*
-	ADD_TO_CACHE
-	Inserts new data copied from src to the cache corresponding to the
+	ADD_CACHE
+	Inserts new data copied from s to the cache corresponding to the
 	specified file descriptor by appending the existing data. If no cache
 	already exist, the function creates a new node to the cache list.
 	PARAMETER(S)
 	1/	Pointer to cache
 	2/	File descriptor associated with the data to add
-	2/	Data string to add
+	3/	Pointer to the data to copy into cache
+	4/	Number of characters from s to be copied into cache
 	RETURN
 	The function returns a pointer to the first node of the cache list if
 	insertion was successful. If an error occurred, it returns NULL.
 */
 
-static t_cache	*add_to_cache(t_cache **cache, int fd, char const *src)
+static t_cache	*add_cache(t_cache **cache, int fd, char const *s, size_t len)
 {
 	t_cache	*current;
 	t_cache	*new_cache;
@@ -65,7 +66,7 @@ static t_cache	*add_to_cache(t_cache **cache, int fd, char const *src)
 		current = current->next;
 	if (current)
 	{
-		current->data = ft_strjoin_and_free(current->data, src);
+		current->data = ft_stradd(current->data, s, len);
 		if (!current->data)
 			return (exit_error(cache, fd, NULL));
 		return (*cache);
@@ -74,7 +75,7 @@ static t_cache	*add_to_cache(t_cache **cache, int fd, char const *src)
 	if (!new_cache)
 		return (exit_error(cache, fd, NULL));
 	new_cache->fd = fd;
-	new_cache->data = ft_substr(src, 0, ft_strlen(src));
+	new_cache->data = ft_substr(s, 0, len);
 	if (!new_cache->data)
 		return (exit_error(cache, fd, new_cache));
 	new_cache->next = *cache;
@@ -170,9 +171,10 @@ char	*get_next_line(int fd)
 		return (exit_error(&cache, fd, NULL));
 	if (cache && get_data(cache, fd) && ft_strchr(*get_data(cache, fd), '\n'))
 		return (extract_line(&cache, fd));
-	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	buffer = (char *)malloc((BUFFER_SIZE) * sizeof(char));
 	if (!buffer)
 		return (exit_error(&cache, fd, NULL));
+	ft_memset(buffer, 0, BUFFER_SIZE);
 	bytes_read = 1;
 	while (bytes_read > 0 && (!get_data(cache, fd)
 			|| !ft_strchr(*get_data(cache, fd), '\n')))
@@ -180,8 +182,7 @@ char	*get_next_line(int fd)
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
 			return (exit_error(&cache, fd, buffer));
-		buffer[bytes_read] = '\0';
-		if (!add_to_cache(&cache, fd, buffer))
+		if (!add_cache(&cache, fd, buffer, bytes_read))
 			return (exit_error(&cache, fd, buffer));
 	}
 	free(buffer);

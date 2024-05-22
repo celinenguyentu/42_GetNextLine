@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:02 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/22 14:41:12 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/22 15:24:52 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,9 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	size = 0;
 	if (!s)
 		return (NULL);
-	while (s[idx] && idx < start)
+	while (idx < start && s[idx])
 		idx++;
-	while (s[idx + size] && size < len)
+	while (size < len && s[idx + size])
 		size++;
 	substr = (char *)malloc((size + 1) * sizeof(char));
 	if (!substr)

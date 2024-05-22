@@ -1,6 +1,6 @@
 NAME		=	gnl
 
-CC			=	gcc
+CC			=	cc
 
 CFLAGS		=	-Wall -Wextra -Werror
 
