@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:02 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/21 18:26:14 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/22 14:41:12 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,19 @@ char	*ft_strchr(const char *s, int c)
 	if (*s == (unsigned char)c)
 		return ((char *)s);
 	return (NULL);
+}
+
+void	*ft_memset(void *b, int c, size_t len)
+{
+	size_t	idx;
+
+	idx = 0;
+	while (idx < len)
+	{
+		((unsigned char *)b)[idx] = (unsigned char)c;
+		idx++;
+	}
+	return (b);
 }
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
@@ -57,35 +70,31 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (substr);
 }
 
-char	*ft_strjoin_and_free(char *s1, char const *s2)
+char	*ft_stradd(char *s1, char const *s2, size_t len)
 {
 	char	*str;
 	size_t	idx;
-	size_t	total_length;
 
 	if (!s2)
 		return (NULL);
-	total_length = ft_strlen(s2);
 	if (s1)
-		total_length += ft_strlen(s1);
-	str = (char *)malloc((total_length + 1) * sizeof(char));
+		str = (char *)malloc((ft_strlen(s1) + len + 1) * sizeof(char));
+	else
+		str = (char *)malloc((len + 1) * sizeof(char));
 	if (!str)
-		return (ft_free(s1));
+	{
+		free(s1);
+		return (NULL);
+	}
 	idx = 0;
 	while (s1 && s1[idx])
 	{
 		str[idx] = s1[idx];
 		idx++;
 	}
-	while (s2 && *s2)
+	while (len-- > 0)
 		str[idx++] = *s2++;
 	str[idx] = '\0';
 	free(s1);
 	return (str);
-}
-
-void	*ft_free(void *ptr)
-{
-	free(ptr);
-	return (NULL);
 }
