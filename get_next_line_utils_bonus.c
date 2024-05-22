@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:02 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/22 15:18:22 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/22 16:07:26 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,6 @@ char	*ft_strchr(const char *s, int c)
 	if (*s == (unsigned char)c)
 		return ((char *)s);
 	return (NULL);
-}
-
-void	*ft_memset(void *b, int c, size_t len)
-{
-	size_t	idx;
-
-	idx = 0;
-	while (idx < len)
-	{
-		((unsigned char *)b)[idx] = (unsigned char)c;
-		idx++;
-	}
-	return (b);
 }
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)

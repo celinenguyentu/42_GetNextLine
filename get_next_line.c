@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:36 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/22 14:28:55 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/22 16:07:05 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ char	*get_next_line(int fd)
 	buffer = (char *)malloc((BUFFER_SIZE) * sizeof(char));
 	if (!buffer)
 		return (exit_error(&cache, NULL));
-	ft_memset(buffer, 0, BUFFER_SIZE);
 	bytes_read = 1;
 	while (bytes_read > 0 && (!cache || !ft_strchr(cache, '\n')))
 	{
