@@ -6,66 +6,12 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:36 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/22 16:07:05 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/23 17:15:45 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-/*
-	EXIT_ERROR
-	Frees cache and other pointer. Cache is reinitialized to NULL.
-	PARAMETER(S)
-	1/	Pointer to cache
-	2/	Other pointer to free
-	RETURN
-	Always returns NULL.
-*/
-
-static void	*exit_error(char **cache, void *ptr)
-{
-	free(*cache);
-	*cache = NULL;
-	free(ptr);
-	return (NULL);
-}
-
-/*
-	EXTRACT_LINE
-	Extracts the first line from the cache, including the terminating newline
-	character '\n' if found. If no newline is found, the full cache is
-	considered as a line. If the cache is empty, the function reinitializes it
-	to NULL before returning NULL. After extraction, the cache is updated to
-	contain only the remaining characters.
-	PARAMETER(S)
-		Pointer to cache
-	RETURN
-	The function returns the first line of the cache. If the cache is empty or
-	if an error occurred, it returns NULL.
-*/
-
-static char	*extract_line(char **cache)
-{
-	char	*line;
-	char	*new_cache;
-	int		line_len;
-
-	if (**cache == '\0')
-		return (exit_error(cache, NULL));
-	if (ft_strchr(*cache, '\n'))
-		line_len = ft_strchr(*cache, '\n') - *cache + 1;
-	else
-		line_len = ft_strlen(*cache);
-	line = ft_substr(*cache, 0, line_len);
-	if (!line)
-		return (exit_error(cache, NULL));
-	new_cache = ft_substr(*cache + line_len, 0, ft_strlen(*cache) - line_len);
-	if (!new_cache)
-		return (exit_error(cache, line));
-	free(*cache);
-	*cache = new_cache;
-	return (line);
-}
+#include <stdio.h>
 
 /*
 	GET_NEXT_LINE
@@ -82,29 +28,40 @@ static char	*extract_line(char **cache)
 	returns NULL.
 */
 
+void	*exit_error(char *str, void *ptr)
+{
+	while (*str)
+		*str++ = '\0';
+	free(ptr);
+	return (NULL);
+}
+
 char	*get_next_line(int fd)
 {
-	char		*buffer;
+	char		*line;
 	int			bytes_read;
-	static char	*cache = NULL;
+	static char	buffer[BUFFER_SIZE + 1];
 
-	if (BUFFER_SIZE < 1 || BUFFER_SIZE > B_MAX || fd < 0 || read(fd, 0, 0) < 0)
-		return (exit_error(&cache, NULL));
-	if (cache && ft_strchr(cache, '\n'))
-		return (extract_line(&cache));
-	buffer = (char *)malloc((BUFFER_SIZE) * sizeof(char));
-	if (!buffer)
-		return (exit_error(&cache, NULL));
+	if (fd < 0 || read(fd, 0, 0) < 0)
+		return (exit_error(buffer, NULL));
+	line = (char *)malloc(sizeof(char));
+	if (!line)
+		return (NULL);
+	line[0] = '\0';
 	bytes_read = 1;
-	while (bytes_read > 0 && (!cache || !ft_strchr(cache, '\n')))
+	while (bytes_read > 0 && !ft_strchr(buffer, '\n'))
 	{
+		line = ft_strappend(line, buffer, ft_strlen(buffer));
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
-			return (exit_error(&cache, buffer));
-		cache = ft_stradd(cache, buffer, bytes_read);
-		if (!cache)
-			return (exit_error(&cache, buffer));
+			return (exit_error(buffer, line));
+		buffer[bytes_read] = '\0';
 	}
-	free(buffer);
-	return (extract_line(&cache));
+	if (bytes_read == 0 && ft_strlen(line) == 0)
+		return (exit_error(buffer, line));
+	if (bytes_read == 0)
+		return (line);
+	line = ft_strappend(line, buffer, ft_strchr(buffer, '\n') - buffer + 1);
+	ft_memcpy(buffer, ft_strchr(buffer, '\n') + 1, ft_strlen(ft_strchr(buffer, '\n') + 1) + 1);
+	return (line);
 }

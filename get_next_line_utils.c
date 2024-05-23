@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:02 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/22 16:07:18 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/05/23 12:32:52 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,45 @@ char	*ft_stradd(char *s1, char const *s2, size_t len)
 	str[idx] = '\0';
 	free(s1);
 	return (str);
+}
+
+char	*ft_strappend(char *s1, char const *s2, size_t len)
+{
+	char	*str;
+	int		idx;
+
+	if (!s1 || !s2)
+		return (NULL);
+	str = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	if (!str)
+	{
+		free(s1);
+		return (NULL);
+	}
+	idx = 0;
+	while (s1[idx])
+	{
+		str[idx] = s1[idx];
+		idx++;
+	}
+	while (len-- > 0)
+		str[idx++] = *s2++;
+	str[idx] = '\0';
+	free(s1);
+	return (str);
+}
+
+void	*ft_memcpy(void *dst, const void *src, size_t n)
+{
+	size_t	idx;
+
+	idx = 0;
+	if (!dst && !src)
+		return (NULL);
+	while (idx < n)
+	{
+		((unsigned char *)dst)[idx] = ((unsigned char *)src)[idx];
+		idx++;
+	}
+	return (dst);
 }
