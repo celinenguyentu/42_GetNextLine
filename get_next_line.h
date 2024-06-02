@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:50 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/23 20:27:19 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/02 03:28:35 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,22 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
-//# if BUFFER_SIZE > RLIMIT_DATA * 1000000000 || BUFFER_SIZE < 1 || BUFFER_SIZE > SIZE_MAX
-//#  undef BUFFER_SIZE
-//#  define BUFFER_SIZE 42
-//# endif
+/*
+# if BUFFER_SIZE > RLIMIT_DATA * 1000000000 || BUFFER_SIZE < 1 || BUFFER_SIZE > SSIZE_MAX
+#  undef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
+*/
+
+// macOS = ~2100000000
 
 char	*get_next_line(int fd);
 
 // utils
 size_t	ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-char	*ft_stradd(char *s1, char const *s2, size_t len);
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 char	*ft_strappend(char *s1, char const *s2, size_t len);
-void	*ft_memcpy(void *dst, const void *src, size_t n);
+
 
 #endif

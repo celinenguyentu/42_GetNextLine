@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:02 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/23 12:32:52 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/01 15:17:13 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,69 +31,36 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
-	char	*substr;
-	size_t	idx;
-	size_t	size;
-
-	idx = 0;
-	size = 0;
-	if (!s)
-		return (NULL);
-	while (idx < start && s[idx])
-		idx++;
-	while (size < len && s[idx + size])
-		size++;
-	substr = (char *)malloc((size + 1) * sizeof(char));
-	if (!substr)
-		return (NULL);
-	substr[size] = '\0';
-	while (size > 0)
-	{
-		substr[size - 1] = s[idx + size - 1];
-		size--;
-	}
-	return (substr);
-}
-
-char	*ft_stradd(char *s1, char const *s2, size_t len)
-{
-	char	*str;
 	size_t	idx;
 
-	if (!s2)
-		return (NULL);
-	if (s1)
-		str = (char *)malloc((ft_strlen(s1) + len + 1) * sizeof(char));
-	else
-		str = (char *)malloc((len + 1) * sizeof(char));
-	if (!str)
-	{
-		free(s1);
-		return (NULL);
-	}
 	idx = 0;
-	while (s1 && s1[idx])
+	if (dstsize != 0)
 	{
-		str[idx] = s1[idx];
-		idx++;
+		while (src[idx] && idx < dstsize - 1)
+		{
+			dst[idx] = src[idx];
+			idx++;
+		}
+		dst[idx] = '\0';
 	}
-	while (len-- > 0)
-		str[idx++] = *s2++;
-	str[idx] = '\0';
-	free(s1);
-	return (str);
+	while (src[idx])
+		idx++;
+	return (idx);
 }
 
 char	*ft_strappend(char *s1, char const *s2, size_t len)
 {
 	char	*str;
 	int		idx;
+	size_t	len_cpy;
 
 	if (!s1 || !s2)
 		return (NULL);
-	str = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	len_cpy = ft_strlen(s2);
+	len_cpy = (len < len_cpy) * len + (len >= len_cpy) * len_cpy;
+	str = (char *)malloc((ft_strlen(s1) + len_cpy + 1) * sizeof(char));
 	if (!str)
 	{
 		free(s1);
@@ -105,24 +72,9 @@ char	*ft_strappend(char *s1, char const *s2, size_t len)
 		str[idx] = s1[idx];
 		idx++;
 	}
-	while (len-- > 0)
+	while (len_cpy-- > 0)
 		str[idx++] = *s2++;
 	str[idx] = '\0';
 	free(s1);
 	return (str);
-}
-
-void	*ft_memcpy(void *dst, const void *src, size_t n)
-{
-	size_t	idx;
-
-	idx = 0;
-	if (!dst && !src)
-		return (NULL);
-	while (idx < n)
-	{
-		((unsigned char *)dst)[idx] = ((unsigned char *)src)[idx];
-		idx++;
-	}
-	return (dst);
 }
