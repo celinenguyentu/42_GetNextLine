@@ -11,10 +11,12 @@ int	main(void)
 	int		n;
 
 
-	printf("RLIMIT_DATA = %d\n", RLIMIT_DATA * 1000000000);
-	printf("SIZE_MAX : %lu\n", LONG_MAX);
-	printf("BUFFER_SIZE = %d\n", BUFFER_SIZE);
-	fd = open("tests/linesnumber", O_RDONLY);
+	printf("RLIMIT_AS = %d\n", RLIMIT_AS);
+	printf("RLIMIT_DATA = %d\n", RLIMIT_DATA);
+	printf("BUFFER_SIZE = %ld\n", (long)BUFFER_SIZE);
+	printf("SIZE_MAX = %lu\n", SIZE_MAX);
+	printf("SSIZE_MAX = %ld\n", SSIZE_MAX);
+	fd = open("tests/1char.txt", O_RDONLY);
 	if (fd == -1)
 		exit(1);
 	n = 0;

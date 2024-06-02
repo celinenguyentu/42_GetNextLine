@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:33:11 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/22 14:24:05 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/01 15:36:31 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,33 +38,24 @@ int	ft_puterror(const char *str)
 void	run_gnl(int fd, int n_lines)
 {
 	char	*line;
-	int		l_print;
-	int		l_total;
+	int		n_print;
 
 	line = "";
-	l_total = 0;
-	l_print = 0;
-	while (line != NULL)
+	n_print = 0;
+	while ((n_lines == -1 || n_print < n_lines) && line != NULL)
 	{
 		line = get_next_line(fd);
-		if (n_lines == -1 || n_lines > 0)
-		{
-			if (line)
-			{
-				l_print++;
-				printf("%d | ", l_print);
-			}
-			printf("%s", line);
-			if (n_lines != -1)
-				n_lines--;
-		}
 		if (line)
-			l_total++;
+		{
+			n_print++;
+			printf("%d | ", n_print);
+		}
+		printf("%s", line);
 		free(line);
 	}
 	printf("\n--------------------------------------------------\n");
-	printf("Printed %d lines out of %d.\n", l_print, l_total);
-	printf("BUFFER_SIZE = %lu / %lu\n", (unsigned long)BUFFER_SIZE, LONG_MAX);
+	printf("Printed %d lines.\n", n_print);
+	printf("BUFFER_SIZE = %lu \n", (unsigned long)BUFFER_SIZE);
 }
 
 int	main(int argc, char **argv)
