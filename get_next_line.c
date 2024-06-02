@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:36 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/06/02 17:22:43 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/02 20:20:51 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*get_next_line(int fd)
 	bytes_read = 1;
 	while (bytes_read > 0 && !ft_strchr(buffer, '\n'))
 	{
-		if (!ft_strnmove(&line, buffer, ft_strlen(buffer)))
+		if (!ft_strsmove(&line, buffer, ft_strchr(buffer, '\0') - 1))
 			return (exit_gnl(buffer, NULL, NULL));
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
@@ -66,93 +66,7 @@ char	*get_next_line(int fd)
 	}
 	if (bytes_read == 0)
 		return (exit_gnl(buffer, NULL, line));
-	if (!ft_strnmove(&line, buffer, ft_strchr(buffer, '\n') - buffer + 1))
+	if (!ft_strsmove(&line, buffer, ft_strchr(buffer, '\n')))
 		return (exit_gnl(buffer, NULL, NULL));
 	return (line);
 }
-
-/* SAVE
-
-static void	*exit_error(char *str, void *ptr)
-{
-	while (*str)
-		*str++ = '\0';
-	free(ptr);
-	return (NULL);
-}
-
-char	*get_next_line(int fd)
-{
-	char		*line;
-	int			bytes_read;
-	static char	buffer[BUFFER_SIZE + 1];
-
-	if (fd < 0 || read(fd, 0, 0) < 0)
-		return (exit_error(buffer, NULL));
-	line = (char *)malloc(sizeof(char));
-	if (!line)
-		return (exit_error(buffer, NULL));
-	line[0] = '\0';
-	bytes_read = 1;
-	while (bytes_read > 0 && !ft_strchr(buffer, '\n'))
-	{
-		if (!ft_strappend(&line, buffer, ft_strlen(buffer)))
-			return (exit_error(buffer, NULL));
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read == -1)
-			return (exit_error(buffer, line));
-		buffer[bytes_read] = '\0';
-	}
-	if (bytes_read == 0 && *line == '\0')
-		return (exit_error(buffer, line));
-	if (bytes_read == 0)
-		return (line);
-	if (!ft_strappend(&line, buffer, ft_strchr(buffer, '\n') - buffer + 1))
-		return (exit_error(buffer, NULL));
-	return (line);
-}
-*/
-
-/* SAVE
-static char	*update_line(char *line, char *buffer, int bytes_read)
-{
-	char	*next_line;
-
-	if (bytes_read == 0 && *line == '\0')
-		return (exit_error(buffer, line));
-	if (bytes_read == 0)
-		return (line);
-	next_line = ft_strchr(buffer, '\n');
-	line = ft_strappend(line, buffer, next_line - buffer + 1);
-	if (!line)
-		return (exit_error(buffer, NULL));
-	ft_strlcpy(buffer, next_line + 1, ft_strlen(next_line + 1) + 1);
-	return (line);
-}
-
-char	*get_next_line(int fd)
-{
-	char		*line;
-	int			bytes_read;
-	static char	buffer[BUFFER_SIZE + 1];
-
-	if (fd < 0 || read(fd, 0, 0) < 0)
-		return (exit_error(buffer, NULL));
-	line = (char *)malloc(sizeof(char));
-	if (!line)
-		return (exit_error(buffer, NULL));
-	line[0] = '\0';
-	bytes_read = 1;
-	while (bytes_read > 0 && !ft_strchr(buffer, '\n'))
-	{
-		line = ft_strappend(line, buffer, ft_strlen(buffer));
-		if (!line)
-			return (exit_error(buffer, NULL));
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read == -1)
-			return (exit_error(buffer, line));
-		buffer[bytes_read] = '\0';
-	}
-	return (update_line(line, buffer, bytes_read));
-}
-*/

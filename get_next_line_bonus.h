@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:50 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/22 16:07:59 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/02 21:58:43 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,16 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
-# define B_MAX LONG_MAX
 
-typedef struct s_cache
-{
-	int				fd;
-	char			*data;
-	struct s_cache	*next;
-}	t_cache;
+# if BUFFER_SIZE > RLIMIT_DATA * 1000000000 / (OPEN_MAX + 3) || BUFFER_SIZE < 1
+#  undef BUFFER_SIZE
+#  define BUFFER_SIZE 42
+# endif
 
 char	*get_next_line(int fd);
 
 // utils
-size_t	ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);
-char	*ft_substr(char const *s, unsigned int start, size_t len);
-char	*ft_stradd(char *s1, char const *s2, size_t len);
+char	*ft_strsmove(char **s1, char *s2, char *stopmove);
 
 #endif

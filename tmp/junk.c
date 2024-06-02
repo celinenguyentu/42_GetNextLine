@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 00:44:15 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/05 17:06:22 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/02 18:43:46 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,4 +257,152 @@ t_cachelist	*new_cache(int fd, const char *str)
 	new->cache = cache;
 	new->next = NULL;
 	return (new);
+}
+
+/*// SAVE
+void	*exit_error(char buffer[OPEN_MAX][BUFFER_SIZE + 1], int fd, void *ptr)
+{
+	ssize_t	idx;
+	
+	idx = 0;
+	if (fd >= 0)
+	{
+		while (buffer[fd][idx])
+		{
+			buffer[fd][idx] = '\0';
+			idx++;
+		}
+	}
+	free(ptr);
+	return (NULL);
+}
+
+char	*get_next_line(int fd)
+{
+	char		*line;
+	int			bytes_read;
+	static char	buffer[OPEN_MAX][BUFFER_SIZE + 1];
+
+	if (fd < 0 || read(fd, 0, 0) < 0)
+		return (exit_error(buffer, fd, NULL));
+	line = (char *)malloc(sizeof(char));
+	if (!line)
+		return (exit_error(buffer, fd, NULL));
+	line[0] = '\0';
+	bytes_read = 1;
+	while (bytes_read > 0 && !ft_strchr(buffer[fd], '\n'))
+	{
+		line = ft_strappend(line, buffer[fd], ft_strlen(buffer[fd]));
+		if (!line)
+			return (exit_error(buffer, fd, NULL));
+		bytes_read = read(fd, buffer[fd], BUFFER_SIZE);
+		if (bytes_read == - 1)
+			return (exit_error(buffer, fd, line));
+		buffer[fd][bytes_read] = '\0';
+	}
+	if (bytes_read == 0 && ft_strlen(line) == 0)
+		return (exit_error(buffer, fd, line));
+	if (bytes_read == 0)
+		return (line);
+	line = ft_strappend(line, buffer[fd], ft_strchr(buffer[fd], '\n') - buffer[fd] + 1);
+	if (!line)
+		return (exit_error(buffer, fd, NULL));
+	ft_memcpy(buffer[fd], ft_strchr(buffer[fd], '\n') + 1, ft_strlen(ft_strchr(buffer[fd], '\n') + 1) + 1);
+	return (line);
+}
+*/
+
+
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*substr;
+	size_t	idx;
+	size_t	size;
+
+	idx = 0;
+	size = 0;
+	if (!s)
+		return (NULL);
+	while (idx < start && s[idx])
+		idx++;
+	while (size < len && s[idx + size])
+		size++;
+	substr = (char *)malloc((size + 1) * sizeof(char));
+	if (!substr)
+		return (NULL);
+	substr[size] = '\0';
+	while (size > 0)
+	{
+		substr[size - 1] = s[idx + size - 1];
+		size--;
+	}
+	return (substr);
+}
+
+char	*ft_stradd(char *s1, char const *s2, size_t len)
+{
+	char	*str;
+	size_t	idx;
+
+	if (!s1 || !s2)
+		return (NULL);
+	str = (char *)malloc((ft_strlen(s1) + len + 1) * sizeof(char));
+	if (!str)
+	{
+		free(s1);
+		return (NULL);
+	}
+	idx = 0;
+	while (s1 && s1[idx])
+	{
+		str[idx] = s1[idx];
+		idx++;
+	}
+	while (len-- > 0)
+		str[idx++] = *s2++;
+	str[idx] = '\0';
+	free(s1);
+	return (str);
+}
+
+char	*ft_strappend(char *s1, char const *s2, size_t len)
+{
+	char	*str;
+	int		idx;
+
+	if (!s1 || !s2)
+		return (NULL);
+	str = (char *)malloc((ft_strlen(s1) + len + 1) * sizeof(char));
+	if (!str)
+	{
+		free(s1);
+		return (NULL);
+	}
+	idx = 0;
+	while (s1[idx])
+	{
+		str[idx] = s1[idx];
+		idx++;
+	}
+	while (len-- > 0)
+		str[idx++] = *s2++;
+	str[idx] = '\0';
+	free(s1);
+	return (str);
+}
+
+void	*ft_memcpy(void *dst, const void *src, size_t n)
+{
+	size_t	idx;
+
+	idx = 0;
+	if (!dst && !src)
+		return (NULL);
+	while (idx < n)
+	{
+		((unsigned char *)dst)[idx] = ((unsigned char *)src)[idx];
+		idx++;
+	}
+	return (dst);
 }

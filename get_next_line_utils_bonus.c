@@ -6,21 +6,11 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:02 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/22 16:07:26 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/02 22:20:31 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	len;
-
-	len = 0;
-	while (s[len])
-		len++;
-	return (len);
-}
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -31,54 +21,47 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char	*substr;
-	size_t	idx;
-	size_t	size;
+/*
+	FT_STRSMOVE
+	Moves the initial portion of the string s2 until the character pointed to
+	by the third argument (included) to the end of the string s1. The first
+	string has to be allocated in the heap, so that the memory is freed and a
+	new concatenated string is allocated. The remaining characters in s2 are
+	moved to the beginning of the memory area.
+	PARAMETERS
+	1.	The address of the string to append with characters from s2.
+	2.	The string from which the characters are moved.
+	3.	The address of the last character to move.
+	RETURN
+	The function returns the new string from concatenation of s1 and the
+	beginning of s2. If an error occured, it returns NULL.
+*/
 
-	idx = 0;
-	size = 0;
-	if (!s)
-		return (NULL);
-	while (idx < start && s[idx])
-		idx++;
-	while (size < len && s[idx + size])
-		size++;
-	substr = (char *)malloc((size + 1) * sizeof(char));
-	if (!substr)
-		return (NULL);
-	substr[size] = '\0';
-	while (size > 0)
-	{
-		substr[size - 1] = s[idx + size - 1];
-		size--;
-	}
-	return (substr);
-}
-
-char	*ft_stradd(char *s1, char const *s2, size_t len)
+char	*ft_strsmove(char **s1, char *s2, char *stopmove)
 {
 	char	*str;
+	size_t	s2_len;
+	size_t	s1_len;
 	size_t	idx;
+	size_t	idy;
 
-	if (!s1 || !s2)
-		return (NULL);
-	str = (char *)malloc((ft_strlen(s1) + len + 1) * sizeof(char));
+	s2_len = stopmove - s2 + 1;
+	s1_len = ft_strchr(*s1, '\0') - *s1;
+	str = (char *)malloc((s1_len + s2_len + 1) * sizeof(char));
 	if (!str)
-	{
-		free(s1);
-		return (NULL);
-	}
-	idx = 0;
-	while (s1 && s1[idx])
-	{
-		str[idx] = s1[idx];
-		idx++;
-	}
-	while (len-- > 0)
-		str[idx++] = *s2++;
+		return (free(*s1), NULL);
+	idx = -1;
+	while ((*s1)[++idx])
+		str[idx] = (*s1)[idx];
+	idy = 0;
+	while (idy < s2_len && s2[idy])
+		str[idx++] = s2[idy++];
 	str[idx] = '\0';
-	free(s1);
+	idx = 0;
+	while (s2[idy])
+		s2[idx++] = s2[idy++];
+	s2[idx] = '\0';
+	free(*s1);
+	*s1 = str;
 	return (str);
 }

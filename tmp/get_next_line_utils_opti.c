@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:02 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/14 20:40:49 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/01 15:04:48 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,3 +112,31 @@ char	*ft_strjoin_and_free(char *s1, char const *s2)
 	free(s1);
 	return (str);
 }
+
+
+/*
+
+ssize_t	ft_find(const char *s, int c)
+{
+	ssize_t	idx;
+	
+	idx = 0;
+	while (s[idx] && s[idx] != (unsigned char)c)
+		idx++;
+	if (s[idx] == (unsigned char)c)
+		return (idx);
+	return (-1);
+}
+
+char	*ft_strmove(char *s1, char *s2, char sep)
+{
+	char	*str;
+	size_t	idx;
+	size_t	strlen;
+
+	
+	strlen = ft_find(s2, '\n')
+	str = (char *)malloc()
+
+	
+}*/

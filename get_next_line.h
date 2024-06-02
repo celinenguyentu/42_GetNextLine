@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:50 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/06/02 17:21:43 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/02 21:05:22 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@
 char	*get_next_line(int fd);
 
 // utils
-size_t	ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);
-char	*ft_strnmove(char **s1, char *s2, size_t len);
+char	*ft_strsmove(char **s1, char *s2, char *stopmove);
 
 #endif

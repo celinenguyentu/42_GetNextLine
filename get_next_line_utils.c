@@ -6,21 +6,11 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 18:00:02 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/06/02 16:48:58 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/02 22:18:55 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-size_t	ft_strlen(const char *s)
-{
-	size_t	len;
-
-	len = 0;
-	while (s[len])
-		len++;
-	return (len);
-}
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -31,23 +21,40 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strnmove(char **s1, char *s2, size_t len)
+/*
+	FT_STRSMOVE
+	Moves the initial portion of the string s2 until the character pointed to
+	by the third argument (included) to the end of the string s1. The first
+	string has to be allocated in the heap, so that the memory is freed and a
+	new concatenated string is allocated. The remaining characters in s2 are
+	moved to the beginning of the memory area.
+	PARAMETERS
+	1.	The address of the string to append with characters from s2.
+	2.	The string from which the characters are moved.
+	3.	The address of the last character to move.
+	RETURN
+	The function returns the new string from concatenation of s1 and the
+	beginning of s2. If an error occured, it returns NULL.
+*/
+
+char	*ft_strsmove(char **s1, char *s2, char *stopmove)
 {
 	char	*str;
-	size_t	cpylen;
+	size_t	s2_len;
+	size_t	s1_len;
 	size_t	idx;
 	size_t	idy;
 
-	cpylen = ft_strlen(s2);
-	cpylen = (len < cpylen) * len + (len >= cpylen) * cpylen;
-	str = (char *)malloc((ft_strlen(*s1) + cpylen + 1) * sizeof(char));
+	s2_len = stopmove - s2 + 1;
+	s1_len = ft_strchr(*s1, '\0') - *s1;
+	str = (char *)malloc((s1_len + s2_len + 1) * sizeof(char));
 	if (!str)
 		return (free(*s1), NULL);
 	idx = -1;
 	while ((*s1)[++idx])
 		str[idx] = (*s1)[idx];
 	idy = 0;
-	while (idy < cpylen && s2[idy])
+	while (idy < s2_len && s2[idy])
 		str[idx++] = s2[idy++];
 	str[idx] = '\0';
 	idx = 0;
@@ -58,117 +65,3 @@ char	*ft_strnmove(char **s1, char *s2, size_t len)
 	*s1 = str;
 	return (str);
 }
-
-/*
-char	*ft_strappend(char **s1, char const *s2, size_t len)
-{
-	char	*str;
-	int		idx;
-	size_t	len_cpy;
-
-	len_cpy = ft_strlen(s2);
-	len_cpy = (len < len_cpy) * len + (len >= len_cpy) * len_cpy;
-	if (*s1)
-		len_cpy += ft_strlen(*s1);
-	str = (char *)malloc((len_cpy + 1) * sizeof(char));
-	if (!str)
-	{
-		free(*s1);
-		return (NULL);
-	}
-	idx = 0;
-	while ((*s1) && (*s1)[idx])
-	{
-		str[idx] = (*s1)[idx];
-		idx++;
-	}
-	while (len_cpy-- > 0)
-		str[idx++] = *s2++;
-	str[idx] = '\0';
-	free(*s1);
-	*s1 = str;
-	return (*s1);
-}*/
-
-/*
-char	*ft_strappend(char *s1, char const *s2, size_t len)
-{
-	char	*str;
-	int		idx;
-	size_t	len_cpy;
-
-	if (!s2)
-		return (NULL);
-	len_cpy = ft_strlen(s2);
-	len_cpy = (len < len_cpy) * len + (len >= len_cpy) * len_cpy;
-	if (s1)
-		len_cpy += ft_strlen(s1);
-	str = (char *)malloc((len_cpy + 1) * sizeof(char));
-	if (!str)
-	{
-		if (s1)
-			free(s1);
-		return (NULL);
-	}
-	idx = 0;
-	while (s1 && s1[idx])
-	{
-		str[idx] = s1[idx];
-		idx++;
-	}
-	while (len_cpy-- > 0)
-		str[idx++] = *s2++;
-	str[idx] = '\0';
-	if (s1)
-		free(s1);
-	return (str);
-}*/
-
-/* SAVE
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
-{
-	size_t	idx;
-
-	idx = 0;
-	if (dstsize != 0)
-	{
-		while (src[idx] && idx < dstsize - 1)
-		{
-			dst[idx] = src[idx];
-			idx++;
-		}
-		dst[idx] = '\0';
-	}
-	while (src[idx])
-		idx++;
-	return (idx);
-}
-
-char	*ft_strappend(char *s1, char const *s2, size_t len)
-{
-	char	*str;
-	int		idx;
-	size_t	len_cpy;
-
-	if (!s2 || !s1)
-		return (NULL);
-	len_cpy = ft_strlen(s2);
-	len_cpy = (len < len_cpy) * len + (len >= len_cpy) * len_cpy;
-	str = (char *)malloc((ft_strlen(s1) +len_cpy + 1) * sizeof(char));
-	if (!str)
-	{
-		free(s1);
-		return (NULL);
-	}
-	idx = 0;
-	while (s1[idx])
-	{
-		str[idx] = s1[idx];
-		idx++;
-	}
-	while (len_cpy-- > 0)
-		str[idx++] = *s2++;
-	str[idx] = '\0';
-	free(s1);
-	return (str);
-}*/

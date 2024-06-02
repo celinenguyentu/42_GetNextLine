@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 20:44:01 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/05/06 22:30:59 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/02 21:48:40 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,6 @@ int	main(int argc, char **argv)
 			printf(", ");
 		idx++;
 	}
-	printf("BUFFER_SIZE = %lu / %lu\n", (unsigned long)BUFFER_SIZE, LONG_MAX);
+	printf("BUFFER_SIZE = %lu\n", (unsigned long)BUFFER_SIZE);
 	return (0);
 }

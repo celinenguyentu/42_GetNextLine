@@ -1,28 +1,25 @@
 NAME		=	gnl
-
 CC			=	cc
-
 CFLAGS		=	-Wall -Wextra -Werror
+VFLAGS		=	-g
 
 MSRCS		=	mandatory_tests.c \
 				../get_next_line.c \
 				../get_next_line_utils.c
-
-MOFILES		=	${MSRCS:.c=.o}
-
 BSRCS		=	bonus_tests.c \
 				../get_next_line_bonus.c \
 				../get_next_line_utils_bonus.c
 
+MOFILES		=	${MSRCS:.c=.o}
 BOFILES		=	${BSRCS:.c=.o}
 
 all:		${NAME}
 
 ${NAME}:	${MOFILES}
-			@${CC} ${CFLAGS} ${OPTION} ${MOFILES} -o ${NAME} -g
+			@${CC} ${CFLAGS} ${VFLAGS} ${OPTION} ${MOFILES} -o ${NAME}
 
 bonus:		${BOFILES}
-			@${CC} ${CFLAGS} ${OPTION} ${BOFILES} -o ${NAME} -g
+			@${CC} ${CFLAGS} ${VFLAGS} ${OPTION} ${BOFILES} -o ${NAME}
 
 .c.o: 
 	@${CC} ${CFLAGS} ${OPTION} -c $< -o $@
