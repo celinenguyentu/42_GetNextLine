@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:50 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/06/03 12:45:51 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/03 14:52:27 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@
 //	2000000000 RLIMIT_DATA
 //	10000000 Tripouille
 //	1000000 fsoares
-// ~2000000000 max on macOS
+// ~2000000000 max on macOS Silicon
+// ~2100000000 max on macOS Intel
 
 /*# if BUFFER_SIZE > RLIMIT_DATA * 1000000000 || BUFFER_SIZE < 1
 #  undef BUFFER_SIZE
