@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:50 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/06/02 21:58:43 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/03 02:33:24 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,18 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <limits.h>
+# include <stdio.h>
+# include <sys/resource.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
+						
+//	200000 RLIMIT_DATA / OPEN_MAX (2000000000 / 10240)
+//	10000000 Tripouille
+//	1000000 fsoares
 
-# if BUFFER_SIZE > RLIMIT_DATA * 1000000000 / (OPEN_MAX + 3) || BUFFER_SIZE < 1
+# if BUFFER_SIZE > 1000000 || BUFFER_SIZE < 1
 #  undef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif

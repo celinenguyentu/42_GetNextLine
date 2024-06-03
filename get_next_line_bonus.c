@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:36 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/06/02 22:19:29 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/03 02:07:02 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ char	*get_next_line(int fd)
 {
 	char		*line;
 	int			bytes_read;
-	static char	buffer[OPEN_MAX + 3][BUFFER_SIZE + 1];
+	static char	buffer[OPEN_MAX][BUFFER_SIZE + 1];
 
-	if (fd < 0 || fd > OPEN_MAX + 3)
+	if (fd < 0 || fd > OPEN_MAX)
 		return (NULL);
 	line = (char *)malloc(sizeof(char));
 	if (!line)

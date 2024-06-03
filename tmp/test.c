@@ -5,7 +5,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <limits.h>
-#include "get_next_line_bonus.h"
+//#include "get_next_line_bonus.h"
 
 int	main(void)
 {
@@ -15,14 +15,15 @@ int	main(void)
 
 	printf("RLIMIT_AS = %d\n", RLIMIT_AS);
 	printf("RLIMIT_DATA = %d\n", RLIMIT_DATA);
-	printf("BUFFER_SIZE = %ld\n", (long)BUFFER_SIZE);
+	//printf("BUFFER_SIZE = %ld\n", (long)BUFFER_SIZE);
 	printf("SIZE_MAX = %lu\n", SIZE_MAX);
 	printf("SSIZE_MAX = %ld\n", SSIZE_MAX);
 	printf("OPEN_MAX = %d\n", OPEN_MAX);
 	printf("FOPEN_MAX = %d\n", FOPEN_MAX);
-	printf("_SC_OPEN_MAX = %d\n", _SC_OPEN_MAX);
+	printf("_SC_OPEN_MAX = %ld\n", sysconf(_SC_OPEN_MAX));
 	printf("_POSIX_OPEN_MAX = %d\n", _POSIX_OPEN_MAX);
 	printf("RLIMIT_NOFILE = %d\n", RLIMIT_NOFILE);
+
 /*
 	for (int i = 0; i < 10250; i++)
 	{
@@ -37,7 +38,7 @@ int	main(void)
 		free(line);
 	}
 */
-
+/*
 	int fd = open("tests/1char.txt", O_RDONLY);
 	if (fd == -1)
 		exit(1);
@@ -47,5 +48,6 @@ int	main(void)
 		line = get_next_line(fd);
 		printf("%s", line);
 	}
+	*/
 	return (0);
 }
