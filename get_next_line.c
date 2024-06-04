@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:36 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/06/02 20:20:51 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/04 04:34:16 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,9 @@ static void	*exit_gnl(char *buffer, void *ptr, char *line)
 	while (*buffer)
 		*buffer++ = '\0';
 	free(ptr);
-	if (line)
-	{
-		if (*line != '\0')
-			return (line);
-		free(line);
-	}
+	if (line && *line != '\0')
+		return (line);
+	free(line);
 	return (NULL);
 }
 
