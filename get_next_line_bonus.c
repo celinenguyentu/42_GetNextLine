@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:36 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/06/03 02:07:02 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/04 21:53:16 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,9 @@ static void	*exit_gnl(char *buffer, void *ptr, char *line)
 		*buffer++ = '\0';
 	if (ptr != line)
 		free(ptr);
-	if (line)
-	{
-		if (*line != '\0')
-			return (line);
-		free(line);
-	}
+	if (line && *line != '\0')
+		return (line);
+	free(line);
 	return (NULL);
 }
 
@@ -47,9 +44,9 @@ char	*get_next_line(int fd)
 {
 	char		*line;
 	int			bytes_read;
-	static char	buffer[OPEN_MAX][BUFFER_SIZE + 1];
+	static char	buffer[FOPEN_MAX][BUFFER_SIZE + 1];
 
-	if (fd < 0 || fd > OPEN_MAX)
+	if (fd < 0 || fd > FOPEN_MAX)
 		return (NULL);
 	line = (char *)malloc(sizeof(char));
 	if (!line)

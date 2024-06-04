@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:50 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/06/03 15:06:01 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/04 23:26:57 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,12 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
-						
-//	200000 RLIMIT_DATA / OPEN_MAX (2000000000 / 10240)
-//	10000000 Tripouille
-//	1000000 fsoares
-// ~1045410 max on macOS francinette 
-// ~2100000000 max on macOS Intel francinette ok without restriction
-/*
-# if BUFFER_SIZE > 1000000 || BUFFER_SIZE < 1
+
+# if BUFFER_SIZE > 90000000 || BUFFER_SIZE < 1
 #  undef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
-*/
+
 char	*get_next_line(int fd);
 
 // utils
