@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:50 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/06/04 04:31:47 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/04 21:49:19 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,10 @@
 
 # include <unistd.h>
 # include <stdlib.h>
-# include <limits.h>
-# include <sys/resource.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
-
-//	2000000000 RLIMIT_DATA
-//	10000000 Tripouille
-//	1000000 fsoares
-// ~2000000000 max on macOS Silicon
-// ~2100000000 max on macOS Intel
-//Reading /proc/meminfo (Linux specific):
 
 # if BUFFER_SIZE > 2000000000 || BUFFER_SIZE < 1
 #  undef BUFFER_SIZE
