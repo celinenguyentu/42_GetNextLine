@@ -5,7 +5,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <limits.h>
-#include "get_next_line_bonus.h"
+//#include "get_next_line_bonus.h"
 
 int	main(void)
 {
@@ -24,15 +24,38 @@ int	main(void)
 	printf("_POSIX_OPEN_MAX = %d\n", _POSIX_OPEN_MAX);
 	printf("RLIMIT_NOFILE = %d\n", RLIMIT_NOFILE);
 
-	struct rlimit limit;
+	struct rlimit open_files_limit;
+	struct rlimit limit_as;
+    struct rlimit limit_data;
 
-    if (getrlimit(RLIMIT_NOFILE, &limit) == 0) {
-        printf("Soft limit: %llu\n", limit.rlim_cur);
-        printf("Hard limit: %llu\n", limit.rlim_max);
+	// Get the current limits on the number of open files
+    if (getrlimit(RLIMIT_NOFILE, &open_files_limit) == 0) {
+        printf("Open files limit:\n");
+        printf("  Soft limit: %ld\n", (long)open_files_limit.rlim_cur);
+        printf("  Hard limit: %ld\n", (long)open_files_limit.rlim_max);
     } else {
-        perror("getrlimit");
+        perror("getrlimit RLIMIT_NOFILE");
+        return EXIT_FAILURE;
     }
-	
+
+    // Get the current limits on address space
+    if (getrlimit(RLIMIT_AS, &limit_as) == 0) {
+        printf("Address space limit (RLIMIT_AS):\n");
+        printf("  Soft limit: %ld bytes\n", (long)limit_as.rlim_cur);
+        printf("  Hard limit: %ld bytes\n", (long)limit_as.rlim_max);
+    } else {
+        perror("getrlimit RLIMIT_AS");
+    }
+
+    // Get the current limits on data segment size
+    if (getrlimit(RLIMIT_DATA, &limit_data) == 0) {
+        printf("Data segment size limit (RLIMIT_DATA):\n");
+        printf("  Soft limit: %ld bytes\n", (long)limit_data.rlim_cur);
+        printf("  Hard limit: %ld bytes\n", (long)limit_data.rlim_max);
+    } else {
+        perror("getrlimit RLIMIT_DATA");
+    }
+
 /*
 	int i;
 	for (i = 0; i < 10496; i++)
