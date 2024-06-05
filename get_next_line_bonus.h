@@ -6,7 +6,7 @@
 /*   By: cnguyen- <cnguyen-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 17:59:50 by cnguyen-          #+#    #+#             */
-/*   Updated: 2024/06/05 15:31:56 by cnguyen-         ###   ########.fr       */
+/*   Updated: 2024/06/05 16:13:52 by cnguyen-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,17 @@
 
 # include <unistd.h>
 # include <stdlib.h>
-# include <limits.h>
 # include <stdio.h>
-# include <sys/resource.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
 # endif
-/*                 104500000 (macOS Silicon)
-# if BUFFER_SIZE * FOPEN_MAX > 2000000000 || BUFFER_SIZE < 1
+
+# if BUFFER_SIZE * FOPEN_MAX > 1000000000 || BUFFER_SIZE < 1
 #  undef BUFFER_SIZE
 #  define BUFFER_SIZE 42
-# endif 
-*/
+# endif
+
 char	*get_next_line(int fd);
 
 // utils
