@@ -1,7 +1,7 @@
 NAME		=	gnl
 CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror
-VFLAGS		=	-g
+VFLAGS		=	-g3
 
 MSRCS		=	mandatory_tests.c \
 				../get_next_line.c \
