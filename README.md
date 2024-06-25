@@ -43,6 +43,10 @@ Compile your `main.c` code using the appropriate files
 
 ## Testers
 
+I recommand you to code your own tests. It is not only an important part of the learning process but also allows to run thorough tests that might not be included in other people's testers.
 
+I have coded a basic program to run theses functions using a various range of test files and allowing to modify the size of the buffer that reads and stores data. Please find it in this repository : [GetNextLineTest](https://github.com/celinenguyentu/GetNextLineTest). 
+
+Those are third-party tester to run complementary tests, use them at your own risk :
 - @Tripouille [gnlTester](https://github.com/Tripouille/gnlTester)
 - @xicodomingues [francinette](https://github.com/xicodomingues/francinette)
